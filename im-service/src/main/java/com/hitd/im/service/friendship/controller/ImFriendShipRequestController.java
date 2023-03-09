@@ -15,7 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-
+/**
+ * @author ZhangWeinan
+ * @date 2023-03-09 21:40
+ * @description  添加好友接口
+ */
 @RestController
 @RequestMapping("v1/friendshipRequest")
 public class ImFriendShipRequestController {
@@ -23,6 +27,11 @@ public class ImFriendShipRequestController {
     @Autowired
     ImFriendShipRequestService imFriendShipRequestService;
 
+    /**
+     * @author ZhangWeinan
+     * @date 2023-03-09 22:04
+     * @description 好友申请审核
+     */
     @RequestMapping("/approveFriendRequest")
     public ResponseVO<?> approveFriendRequest(@RequestBody @Validated
                                            ApproverFriendRequestReq req, Integer appId, String identifier){
@@ -30,12 +39,23 @@ public class ImFriendShipRequestController {
         req.setOperator(identifier);
         return imFriendShipRequestService.approveFriendRequest(req);
     }
+
+    /**
+     * @author ZhangWeinan
+     * @date 2023-03-09 22:05
+     * @description 获取好友申请记录
+     */
     @RequestMapping("/getFriendRequest")
     public ResponseVO<List<ImFriendShipRequestEntity>> getFriendRequest(@RequestBody @Validated GetFriendShipRequestReq req, Integer appId){
         req.setAppId(appId);
         return imFriendShipRequestService.getFriendRequest(req.getFromId(),req.getAppId());
     }
 
+    /**
+     * @author ZhangWeinan
+     * @date 2023-03-09 22:05
+     * @description 查看好友申请
+     */
     @RequestMapping("/readFriendShipRequestReq")
     public ResponseVO<?> readFriendShipRequestReq(@RequestBody @Validated ReadFriendShipRequestReq req, Integer appId){
         req.setAppId(appId);

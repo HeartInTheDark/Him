@@ -21,7 +21,7 @@ import javax.annotation.Resource;
 /**
  * @Author ZhangWeinan
  * @Date 2023/3/8 10:49
- * @DES
+ * @DES 用户数据接口
  * @Since Copyright(c)
  */
 @RestController
@@ -31,18 +31,33 @@ public class ImUserDataController {
     @Resource
     private ImUserService imUserService;
 
+    /**
+     * @author ZhangWeinan
+     * @date 2023-03-09 21:43
+     * @description 获取【多个】用户信息
+     */
     @RequestMapping("/getUserInfo")
     public ResponseVO<GetUserInfoResp> getUserInfo(@RequestBody GetUserInfoReq req, Integer appId){//@Validated
         req.setAppId(appId);
         return imUserService.getUserInfo(req);
     }
 
+    /**
+     * @author ZhangWeinan
+     * @date 2023-03-09 21:43
+     * @description 获取一个用户信息
+     */
     @RequestMapping("/getSingleUserInfo")
     public ResponseVO<ImUserDataEntity> getSingleUserInfo(@RequestBody @Validated UserId req, Integer appId){
         req.setAppId(appId);
         return imUserService.getSingleUserInfo(req.getUserId(),req.getAppId());
     }
 
+    /**
+     * @author ZhangWeinan
+     * @date 2023-03-09 21:43
+     * @description 修改用户信息
+     */
     @RequestMapping("/modifyUserInfo")
     public ResponseVO<?> modifyUserInfo(@RequestBody @Validated ModifyUserInfoReq req, Integer appId){
         req.setAppId(appId);

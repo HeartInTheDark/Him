@@ -1,11 +1,9 @@
 package com.hitd.im.service.user.controller;
 
-import com.hitd.im.common.ClientType;
 import com.hitd.im.common.ResponseVO;
 import com.hitd.im.service.user.model.req.*;
 import com.hitd.im.service.user.model.resp.ImportUserResp;
 import com.hitd.im.service.user.service.ImUserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,13 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author ZhangWeinan
  * @date 2023-03-08 11:34
- * @description
+ * @description 用户接口
  */
 @RestController
 @RequestMapping("v1/user")
@@ -27,6 +23,11 @@ public class ImUserController {
     @Resource
     ImUserService imUserService;
 
+    /**
+     * @author ZhangWeinan
+     * @date 2023-03-09 21:42
+     * @description 导入用户
+     */
     @PostMapping("importUser")
     public ResponseVO<ImportUserResp> importUser(@RequestBody ImportUserReq req, Integer appId){
         req.setAppId(appId);
@@ -34,6 +35,11 @@ public class ImUserController {
     }
 
 
+    /**
+     * @author ZhangWeinan
+     * @date 2023-03-09 21:42
+     * @description 删除用户
+     */
     @RequestMapping("/deleteUser")
     public ResponseVO<?>  deleteUser(@RequestBody @Validated DeleteUserReq req, Integer appId) {
         req.setAppId(appId);
@@ -41,10 +47,9 @@ public class ImUserController {
     }
 
     /**
-     * @param req
-     * @return com.lld.im.common.ResponseVO
+     * @author ZhangWeinan
+     * @date 2023-03-09 21:42
      * @description im的登录接口，返回im地址
-     * @author chackylee
      */
     @RequestMapping("/login")
     public ResponseVO login(@RequestBody @Validated LoginReq req, Integer appId) {

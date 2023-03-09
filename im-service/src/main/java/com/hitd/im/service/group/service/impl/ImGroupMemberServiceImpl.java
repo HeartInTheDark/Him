@@ -55,20 +55,20 @@ public class ImGroupMemberServiceImpl implements ImGroupMemberService {
 
 
     @Override
-    public ResponseVO<?> importGroupMember(ImportGroupMemberReq req) {
+    public ResponseVO<List<AddMemberResp>> importGroupMember(ImportGroupMemberReq req) {
 
         List<AddMemberResp> resp = new ArrayList<>();
 
         ResponseVO<ImGroupEntity> groupResp = groupService.getGroup(req.getGroupId(), req.getAppId());
         if (!groupResp.isOk()) {
-            return groupResp;
+            return ResponseVO.errorResponse(groupResp.getCode(),groupResp.getMsg());
         }
 
         for (GroupMemberDto memberId :
                 req.getMembers()) {
-            ResponseVO responseVO = null;
+            ResponseVO<?> responseVO = null;
             try {
-                responseVO = groupMemberService.addGroupMember(req.getGroupId(), req.getAppId(), memberId);
+                responseVO = addGroupMember(req.getGroupId(), req.getAppId(), memberId);
             } catch (Exception e) {
                 e.printStackTrace();
                 responseVO = ResponseVO.errorResponse();
@@ -88,12 +88,7 @@ public class ImGroupMemberServiceImpl implements ImGroupMemberService {
         return ResponseVO.successResponse(resp);
     }
 
-    /**
-     * @param
-     * @return com.lld.im.common.ResponseVO
-     * @description: 添加群成员，内部调用
-     * @author lld
-     */
+
     @Override
     @Transactional
     public ResponseVO<?> addGroupMember(String groupId, Integer appId, GroupMemberDto dto) {
@@ -177,11 +172,7 @@ public class ImGroupMemberServiceImpl implements ImGroupMemberService {
         return ResponseVO.successResponse();
     }
 
-    /**
-     * @return com.lld.im.common.ResponseVO<com.lld.im.service.group.model.resp.GetRoleInGroupResp>
-     * @description 查询用户在群内的角色
-     * @author chackylee
-     */
+
     @Override
     public ResponseVO<GetRoleInGroupResp> getRoleInGroupOne(String groupId, String memberId, Integer appId) {
 
@@ -226,13 +217,7 @@ public class ImGroupMemberServiceImpl implements ImGroupMemberService {
         }
     }
 
-    /**
-     * @param
-     * @return com.lld.im.common.ResponseVO
-     * @description: 添加群成员，拉人入群的逻辑，直接进入群聊。如果是后台管理员，则直接拉入群，
-     * 否则只有私有群可以调用本接口，并且群成员也可以拉人入群.只有私有群可以调用本接口
-     * @author lld
-     */
+
     @Override
     public ResponseVO<?> addMember(AddGroupMemberReq req) {
 

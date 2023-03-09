@@ -2,6 +2,7 @@ package com.hitd.im.service.group.service;
 
 import com.hitd.im.common.ResponseVO;
 import com.hitd.im.service.group.model.req.*;
+import com.hitd.im.service.group.model.resp.AddMemberResp;
 import com.hitd.im.service.group.model.resp.GetRoleInGroupResp;
 
 import java.util.Collection;
@@ -14,7 +15,7 @@ import java.util.List;
  */
 public interface ImGroupMemberService {
 
-    ResponseVO<?> importGroupMember(ImportGroupMemberReq req);
+    ResponseVO<List<AddMemberResp>> importGroupMember(ImportGroupMemberReq req);
 
     ResponseVO<?> addMember(AddGroupMemberReq req);
 

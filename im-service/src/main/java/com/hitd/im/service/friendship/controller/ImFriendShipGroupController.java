@@ -15,9 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @author: Chackylee
- * @description:
- **/
+ * @author ZhangWeinan
+ * @date 2023-03-09 21:40
+ * @description 好友分组接口
+ */
 @RestController
 @RequestMapping("v1/friendship/group")
 public class ImFriendShipGroupController {
@@ -29,26 +30,46 @@ public class ImFriendShipGroupController {
     ImFriendShipGroupMemberService imFriendShipGroupMemberService;
 
 
+    /**
+     * @author ZhangWeinan
+     * @date 2023-03-09 22:03
+     * @description 添加分组
+     */
     @RequestMapping("/add")
     public ResponseVO<?> add(@RequestBody @Validated AddFriendShipGroupReq req, Integer appId)  {
         req.setAppId(appId);
         return imFriendShipGroupService.addGroup(req);
     }
 
+    /**
+     * @author ZhangWeinan
+     * @date 2023-03-09 22:03
+     * @description 删除分组
+     */
     @RequestMapping("/del")
     public ResponseVO<?> del(@RequestBody @Validated DeleteFriendShipGroupReq req, Integer appId)  {
         req.setAppId(appId);
         return imFriendShipGroupService.deleteGroup(req);
     }
 
+    /**
+     * @author ZhangWeinan
+     * @date 2023-03-09 22:04
+     * @description 向分组添加好友
+     */
     @RequestMapping("/member/add")
     public ResponseVO<?> memberAdd(@RequestBody @Validated AddFriendShipGroupMemberReq req, Integer appId)  {
         req.setAppId(appId);
         return imFriendShipGroupMemberService.addGroupMember(req);
     }
 
+    /**
+     * @author ZhangWeinan
+     * @date 2023-03-09 22:04
+     * @description 从分组删除好友
+     */
     @RequestMapping("/member/del")
-    public ResponseVO<?> memberdel(@RequestBody @Validated DeleteFriendShipGroupMemberReq req, Integer appId)  {
+    public ResponseVO<?> memberDel(@RequestBody @Validated DeleteFriendShipGroupMemberReq req, Integer appId)  {
         req.setAppId(appId);
         return imFriendShipGroupMemberService.delGroupMember(req);
     }

@@ -1,6 +1,5 @@
 package com.hitd.im.service.friendship.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.hitd.im.common.ResponseVO;
@@ -84,16 +83,8 @@ public class ImFriendServiceImpl implements ImFriendService {
 
     @Override
     public ResponseVO<?> addFriend(AddFriendReq req) {
-        ResponseVO<ImUserDataEntity> fromInfo = imUserService.getSingleUserInfo(req.getFromId(), req.getAppId());
-        if (!fromInfo.isOk()) {
-            return fromInfo;
-        }
 
-        ResponseVO<ImUserDataEntity> toInfo = imUserService.getSingleUserInfo(req.getToItem().getToId(), req.getAppId());
-        if (!toInfo.isOk()) {
-            return fromInfo;
-        }
-        ImUserDataEntity data = toInfo.getData();
+        ImUserDataEntity data = checkAndReturn(req.getFromId(),req.getToItem().getToId(),req.getAppId()).getData();
 
         if(data.getFriendAllowType() != null && data.getFriendAllowType() == AllowFriendTypeEnum.NOT_NEED.getCode()){
             return doAddFriend(req,req.getFromId(), req.getToItem(), req.getAppId());
@@ -117,17 +108,22 @@ public class ImFriendServiceImpl implements ImFriendService {
         }
     }
 
-    @Override
-    public ResponseVO<?> updateFriend(UpdateFriendReq req) {
-        ResponseVO<ImUserDataEntity> fromInfo = imUserService.getSingleUserInfo(req.getFromId(), req.getAppId());
+    private  ResponseVO<ImUserDataEntity> checkAndReturn(String fromId,String toId,Integer appId){
+        ResponseVO<ImUserDataEntity> fromInfo = imUserService.getSingleUserInfo(fromId,appId);
         if (!fromInfo.isOk()) {
-            return fromInfo;
+            throw new ApplicationException(fromInfo.getCode(),fromInfo.getMsg());
         }
 
-        ResponseVO<ImUserDataEntity> toInfo = imUserService.getSingleUserInfo(req.getToItem().getToId(), req.getAppId());
+        ResponseVO<ImUserDataEntity> toInfo = imUserService.getSingleUserInfo(toId, appId);
         if (!toInfo.isOk()) {
-            return fromInfo;
+            throw new ApplicationException(toInfo.getCode(),toInfo.getMsg());
         }
+        return toInfo;
+    }
+
+    @Override
+    public ResponseVO<?> updateFriend(UpdateFriendReq req) {
+        checkAndReturn(req.getFromId(),req.getToItem().getToId(),req.getAppId());
         return doUpdate(req.getFromId(), req.getToItem(), req.getAppId());
     }
 
@@ -170,7 +166,7 @@ public class ImFriendServiceImpl implements ImFriendService {
     }
 
     @Override
-    public ResponseVO<?> getAllFriendShip(GetAllFriendShipReq req) {
+    public ResponseVO<List<ImFriendShipEntity>> getAllFriendShip(GetAllFriendShipReq req) {
         QueryWrapper<ImFriendShipEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("app_id", req.getAppId())
                 .eq("from_id", req.getFromId())
@@ -179,7 +175,7 @@ public class ImFriendServiceImpl implements ImFriendService {
     }
 
     @Override
-    public ResponseVO<?> getRelation(GetRelationReq req) {
+    public ResponseVO<ImFriendShipEntity> getRelation(GetRelationReq req) {
         QueryWrapper<ImFriendShipEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("app_id", req.getAppId())
                 .eq("from_id", req.getFromId())
@@ -287,6 +283,36 @@ public class ImFriendServiceImpl implements ImFriendService {
         update.setBlack(FriendShipStatusEnum.BLACK_STATUS_NORMAL.getCode());
         int update1 = imFriendShipMapper.update(update, queryFrom);
         return ResponseVO.successResponse();
+    }
+
+    @Override
+    public ResponseVO<?> checkBlack(CheckFriendShipReq req) {
+        Map<String, Integer> toIdMap
+                = req.getToIds().stream().collect(Collectors
+                .toMap(Function.identity(), s -> 0));
+        List<CheckFriendShipResp> result;
+        if (req.getCheckType() == CheckFriendShipTypeEnum.SINGLE.getType()) {
+            result = imFriendShipMapper.checkFriendShipBlack(req);
+        } else {
+            result = imFriendShipMapper.checkFriendShipBlackBoth(req);
+        }
+
+        Map<String, Integer> collect = result.stream()
+                .collect(Collectors
+                        .toMap(CheckFriendShipResp::getToId,
+                                CheckFriendShipResp::getStatus));
+        for (String toId:
+                toIdMap.keySet()) {
+            if(!collect.containsKey(toId)){
+                CheckFriendShipResp checkFriendShipResp = new CheckFriendShipResp();
+                checkFriendShipResp.setToId(toId);
+                checkFriendShipResp.setFromId(req.getFromId());
+                checkFriendShipResp.setStatus(toIdMap.get(toId));
+                result.add(checkFriendShipResp);
+            }
+        }
+
+        return ResponseVO.successResponse(result);
     }
 
     @Transactional

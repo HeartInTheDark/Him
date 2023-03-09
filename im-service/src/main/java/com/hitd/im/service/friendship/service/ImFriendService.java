@@ -4,6 +4,7 @@ package com.hitd.im.service.friendship.service;
 
 import com.hitd.im.common.ResponseVO;
 import com.hitd.im.common.model.RequestBase;
+import com.hitd.im.service.friendship.dao.ImFriendShipEntity;
 import com.hitd.im.service.friendship.model.req.*;
 import com.hitd.im.service.friendship.model.resp.CheckFriendShipResp;
 import com.hitd.im.service.friendship.model.resp.ImportFriendShipResp;
@@ -30,13 +31,15 @@ public interface ImFriendService {
 
     ResponseVO<?> deleteAllFriend(DeleteFriendReq req);
 
-    ResponseVO<?> getAllFriendShip(GetAllFriendShipReq req);
+    ResponseVO<List<ImFriendShipEntity>> getAllFriendShip(GetAllFriendShipReq req);
 
-    ResponseVO<?> getRelation(GetRelationReq req);
+    ResponseVO<ImFriendShipEntity> getRelation(GetRelationReq req);
 
     ResponseVO<List<CheckFriendShipResp>> checkFriendship(CheckFriendShipReq req);
 
     ResponseVO<?> addBlack(AddFriendShipBlackReq req);
 
     ResponseVO<?> deleteBlack(DeleteBlackReq req);
+
+    ResponseVO<?> checkBlack(CheckFriendShipReq req);
 }
