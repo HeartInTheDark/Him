@@ -328,7 +328,7 @@ public class ImGroupMemberServiceImpl implements ImGroupMemberService {
                 }
             }
         }
-        ResponseVO responseVO = groupMemberService.removeGroupMember(req.getGroupId(), req.getAppId(), req.getMemberId());
+        ResponseVO<?> responseVO = groupMemberService.removeGroupMember(req.getGroupId(), req.getAppId(), req.getMemberId());
         if(responseVO.isOk()){
 
 
@@ -356,7 +356,7 @@ public class ImGroupMemberServiceImpl implements ImGroupMemberService {
     @Override
     public ResponseVO<?> updateGroupMember(UpdateGroupMemberReq req) {
 
-        boolean isadmin = false;
+        boolean isAdmin = false;
 
         ResponseVO<ImGroupEntity> group = groupService.getGroup(req.getGroupId(), req.getAppId());
         if (!group.isOk()) {
@@ -371,7 +371,7 @@ public class ImGroupMemberServiceImpl implements ImGroupMemberService {
         //是否是自己修改自己的资料
         boolean isMeOperate = req.getOperator().equals(req.getMemberId());
 
-        if (!isadmin) {
+        if (!isAdmin) {
             //昵称只能自己修改 权限只能群主或管理员修改
             if (StringUtils.isBlank(req.getAlias()) && !isMeOperate) {
                 return ResponseVO.errorResponse(GroupErrorCode.THIS_OPERATE_NEED_ONESELF);

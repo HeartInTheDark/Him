@@ -24,6 +24,11 @@ public class ImGroupMemberController {
     @Autowired
     ImGroupMemberService groupMemberService;
 
+    /**
+     * @author ZhangWeinan
+     * @date 2023-03-09 22:08
+     * @description 导入群成员
+     */
     @RequestMapping("/importGroupMember")
     public ResponseVO<List<AddMemberResp>>importGroupMember(@RequestBody @Validated ImportGroupMemberReq req, Integer appId, String identifier)  {
         req.setAppId(appId);
@@ -31,6 +36,11 @@ public class ImGroupMemberController {
         return groupMemberService.importGroupMember(req);
     }
 
+    /**
+     * @author ZhangWeinan
+     * @date 2023-03-09 22:08
+     * @description 添加群成员
+     */
     @RequestMapping("/add")
     public ResponseVO<?> addMember(@RequestBody @Validated AddGroupMemberReq req, Integer appId, String identifier)  {
         req.setAppId(appId);
@@ -38,6 +48,11 @@ public class ImGroupMemberController {
         return groupMemberService.addMember(req);
     }
 
+    /**
+     * @author ZhangWeinan
+     * @date 2023-03-09 22:08
+     * @description 移除群成员
+     */
     @RequestMapping("/remove")
     public ResponseVO<?> removeMember(@RequestBody @Validated RemoveGroupMemberReq req, Integer appId, String identifier)  {
         req.setAppId(appId);
@@ -45,6 +60,11 @@ public class ImGroupMemberController {
         return groupMemberService.removeMember(req);
     }
 
+    /**
+     * @author ZhangWeinan
+     * @date 2023-03-09 22:08
+     * @description 修改群成员信息
+     */
     @RequestMapping("/update")
     public ResponseVO<?> updateGroupMember(@RequestBody @Validated UpdateGroupMemberReq req, Integer appId, String identifier)  {
         req.setAppId(appId);
@@ -52,6 +72,11 @@ public class ImGroupMemberController {
         return groupMemberService.updateGroupMember(req);
     }
 
+    /**
+     * @author ZhangWeinan
+     * @date 2023-03-09 22:16
+     * @description 禁言群成员
+     */
     @RequestMapping("/speak")
     public ResponseVO<?> speak(@RequestBody @Validated SpeaMemberReq req, Integer appId, String identifier)  {
         req.setAppId(appId);

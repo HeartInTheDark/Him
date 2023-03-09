@@ -107,6 +107,11 @@ public class ImGroupController {
         return groupService.transferGroup(req);
     }
 
+    /**
+     * @author ZhangWeinan
+     * @date 2023-03-09 22:15
+     * @description 禁言群
+     */
     @RequestMapping("/forbidSendMessage")
     public ResponseVO<?> forbidSendMessage(@RequestBody @Validated MuteGroupReq req, Integer appId, String identifier)  {
         req.setAppId(appId);
