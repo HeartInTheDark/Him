@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = ConstraintViolationException.class)
     @ResponseBody
-    public Object handleMethodArgumentNotValidException(ConstraintViolationException ex) {
+    public R<?> handleMethodArgumentNotValidException(ConstraintViolationException ex) {
 
         Set<ConstraintViolation<?>> constraintViolations = ex.getConstraintViolations();
         R<?> resultBean =new R<>();
@@ -65,7 +65,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ApplicationException.class)
     @ResponseBody
-    public Object applicationExceptionHandler(ApplicationException e) {
+    public R<?> applicationExceptionHandler(ApplicationException e) {
         // 使用公共的结果类封装返回结果, 这里我指定状态码为
         R<?> resultBean =new R<>();
         resultBean.setCode(e.getCode());
@@ -81,7 +81,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = BindException.class)
     @ResponseBody
-    public Object  handleException2(BindException ex) {
+    public R<?>  handleException2(BindException ex) {
         FieldError err = ex.getFieldError();
         String message = "参数{".concat(err.getField()).concat("}").concat(err.getDefaultMessage());
         R<?> resultBean =new R<>();
@@ -95,7 +95,7 @@ public class GlobalExceptionHandler {
     //json格式
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     @ResponseBody
-    public Object  handleException1(MethodArgumentNotValidException ex) {
+    public R<?>  handleException1(MethodArgumentNotValidException ex) {
         StringBuilder errorMsg = new StringBuilder();
         BindingResult re = ex.getBindingResult();
         for (ObjectError error : re.getAllErrors()) {
