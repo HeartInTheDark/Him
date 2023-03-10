@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import java.util.Objects;
 import java.util.Set;
 
 
@@ -26,7 +25,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value=Exception.class)
     @ResponseBody
-    public R<?> unknowException(Exception e){
+    public R<?> unKnowExceptionHandler(Exception e){
         e.printStackTrace();
         R<?> resultBean =new R<>();
         resultBean.setCode(BaseErrorCode.SYSTEM_ERROR.getCode());
@@ -48,7 +47,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = ConstraintViolationException.class)
     @ResponseBody
-    public R<?> handleMethodArgumentNotValidException(ConstraintViolationException ex) {
+    public R<?> constraintViolationExceptionHandler(ConstraintViolationException ex) {
         Set<ConstraintViolation<?>> constraintViolations = ex.getConstraintViolations();
         R<?> resultBean =new R<>();
         resultBean.setCode(BaseErrorCode.PARAMETER_ERROR.getCode());
@@ -82,22 +81,19 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = BindException.class)
     @ResponseBody
-    public R<?>  handleException2(BindException ex) {
+    public R<?>  bindExceptionHandler(BindException ex) {
         FieldError err = ex.getFieldError();
-        assert err != null;
-        String message = "参数{".concat(err.getField()).concat("}").concat(Objects.requireNonNull(err.getDefaultMessage()));
+        String message = "参数{".concat(err.getField()).concat("}").concat(err.getDefaultMessage());
         R<?> resultBean =new R<>();
         resultBean.setCode(BaseErrorCode.PARAMETER_ERROR.getCode());
         resultBean.setMsg(message);
         return resultBean;
-
-
     }
 
     //json格式
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     @ResponseBody
-    public R<?>  handleException1(MethodArgumentNotValidException ex) {
+    public R<?>  methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException ex) {
         StringBuilder errorMsg = new StringBuilder();
         BindingResult re = ex.getBindingResult();
         for (ObjectError error : re.getAllErrors()) {
@@ -107,7 +103,7 @@ public class GlobalExceptionHandler {
 
         R<?> resultBean =new R<>();
         resultBean.setCode(BaseErrorCode.PARAMETER_ERROR.getCode());
-        resultBean.setMsg(BaseErrorCode.PARAMETER_ERROR.getError() + " : " + errorMsg.toString());
+        resultBean.setMsg(BaseErrorCode.PARAMETER_ERROR.getError() + " : " + errorMsg);
         return resultBean;
     }
 
