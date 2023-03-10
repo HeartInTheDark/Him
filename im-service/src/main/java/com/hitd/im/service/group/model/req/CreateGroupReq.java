@@ -12,7 +12,7 @@ import java.util.List;
  * @description
  */
 @Data
-public class CreateGroupReq extends RequestBase {
+public class CreateGroupReq extends GroupBaseReq {
 
     private String groupId;
     //群主id

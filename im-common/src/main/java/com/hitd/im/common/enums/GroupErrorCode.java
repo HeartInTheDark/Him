@@ -50,8 +50,8 @@ public enum GroupErrorCode implements ApplicationExceptionEnum {
 
     ;
 
-    private int code;
-    private String error;
+    private final int code;
+    private final String error;
 
     GroupErrorCode(int code, String error){
         this.code = code;

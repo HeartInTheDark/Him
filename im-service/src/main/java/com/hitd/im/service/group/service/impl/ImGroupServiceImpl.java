@@ -46,19 +46,7 @@ public class ImGroupServiceImpl implements ImGroupService {
     @Override
     public R<?> importGroup(ImportGroupReq req) {
 
-        //1.判断群id是否存在
-        QueryWrapper<ImGroupEntity> query = new QueryWrapper<>();
-
-        if (StringUtils.isEmpty(req.getGroupId())) {
-            req.setGroupId(UUID.randomUUID().toString().replace("-", ""));
-        } else {
-            query.eq("group_id", req.getGroupId());
-            query.eq("app_id", req.getAppId());
-            Integer integer = imGroupDataMapper.selectCount(query);
-            if (integer > 0) {
-                throw new ApplicationException(GroupErrorCode.GROUP_IS_EXIST);
-            }
-        }
+        checkGroupIdIsExist(req);
 
         ImGroupEntity imGroupEntity = new ImGroupEntity();
 
@@ -80,6 +68,21 @@ public class ImGroupServiceImpl implements ImGroupService {
         return R.successResponse();
     }
 
+    private void checkGroupIdIsExist(GroupBaseReq req) {
+        if (StringUtils.isEmpty(req.getGroupId())) {
+            req.setGroupId(UUID.randomUUID().toString().replace("-", ""));
+        } else {
+            //1.判断群id是否存在
+            QueryWrapper<ImGroupEntity> query = new QueryWrapper<>();
+            query.eq("group_id", req.getGroupId());
+            query.eq("app_id", req.getAppId());
+            Integer integer = imGroupDataMapper.selectCount(query);
+            if (integer > 0) {
+                throw new ApplicationException(GroupErrorCode.GROUP_IS_EXIST);
+            }
+        }
+    }
+
     @Override
     @Transactional
     public R<?> createGroup(CreateGroupReq req) {
@@ -90,19 +93,7 @@ public class ImGroupServiceImpl implements ImGroupService {
             req.setOwnerId(req.getOperator());
         }
 
-        //1.判断群id是否存在
-        QueryWrapper<ImGroupEntity> query = new QueryWrapper<>();
-
-        if (StringUtils.isEmpty(req.getGroupId())) {
-            req.setGroupId(UUID.randomUUID().toString().replace("-", ""));
-        } else {
-            query.eq("group_id", req.getGroupId());
-            query.eq("app_id", req.getAppId());
-            Integer integer = imGroupDataMapper.selectCount(query);
-            if (integer > 0) {
-                throw new ApplicationException(GroupErrorCode.GROUP_IS_EXIST);
-            }
-        }
+        checkGroupIdIsExist(req);
 
         if (req.getGroupType() == GroupTypeEnum.PUBLIC.getCode() && StringUtils.isBlank(req.getOwnerId())) {
             throw new ApplicationException(GroupErrorCode.PUBLIC_GROUP_MUST_HAVE_OWNER);

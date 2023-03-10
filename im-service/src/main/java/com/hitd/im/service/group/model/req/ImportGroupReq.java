@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
  * @description
  */
 @Data
-public class ImportGroupReq extends RequestBase {
+public class ImportGroupReq extends GroupBaseReq {
 
     private String groupId;
     //群主id
