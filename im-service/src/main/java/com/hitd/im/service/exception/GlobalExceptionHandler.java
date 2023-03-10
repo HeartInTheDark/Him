@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
         resultBean.setMsg(BaseErrorCode.SYSTEM_ERROR.getError());
 
         /*
-         * 系统日常，记入异常日志，可以拓展为邮件提现运维人员
+         * 系统异常，记入异常日志，可拓展为邮件、短信等提醒运维人员
          */
 
         return resultBean;
