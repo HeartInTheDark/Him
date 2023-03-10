@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -30,9 +31,11 @@ public class GlobalExceptionHandler {
         R<?> resultBean =new R<>();
         resultBean.setCode(BaseErrorCode.SYSTEM_ERROR.getCode());
         resultBean.setMsg(BaseErrorCode.SYSTEM_ERROR.getError());
-        /**
-         * 未知异常的话，这里写逻辑，发邮件，发短信都可以、、
+
+        /*
+         * 系统日常，记入异常日志，可以拓展为邮件提现运维人员
          */
+
         return resultBean;
     }
 
@@ -40,13 +43,12 @@ public class GlobalExceptionHandler {
     /**
      * Validator 参数校验异常处理
      *
-     * @param ex
-     * @return
+     * @param ex 单个参数异常
+     * @return R
      */
     @ExceptionHandler(value = ConstraintViolationException.class)
     @ResponseBody
     public R<?> handleMethodArgumentNotValidException(ConstraintViolationException ex) {
-
         Set<ConstraintViolation<?>> constraintViolations = ex.getConstraintViolations();
         R<?> resultBean =new R<>();
         resultBean.setCode(BaseErrorCode.PARAMETER_ERROR.getCode());
@@ -56,7 +58,6 @@ public class GlobalExceptionHandler {
             String paramName = pathImpl.getLeafNode().getName();
             String message = "参数{".concat(paramName).concat("}").concat(constraintViolation.getMessage());
             resultBean.setMsg(message);
-
             return resultBean;
         }
         resultBean.setMsg(BaseErrorCode.PARAMETER_ERROR.getError() + ex.getMessage());
@@ -76,14 +77,15 @@ public class GlobalExceptionHandler {
     /**
      * Validator 参数校验异常处理
      *
-     * @param ex
-     * @return
+     * @param ex 多个参数异常
+     * @return R
      */
     @ExceptionHandler(value = BindException.class)
     @ResponseBody
     public R<?>  handleException2(BindException ex) {
         FieldError err = ex.getFieldError();
-        String message = "参数{".concat(err.getField()).concat("}").concat(err.getDefaultMessage());
+        assert err != null;
+        String message = "参数{".concat(err.getField()).concat("}").concat(Objects.requireNonNull(err.getDefaultMessage()));
         R<?> resultBean =new R<>();
         resultBean.setCode(BaseErrorCode.PARAMETER_ERROR.getCode());
         resultBean.setMsg(message);
