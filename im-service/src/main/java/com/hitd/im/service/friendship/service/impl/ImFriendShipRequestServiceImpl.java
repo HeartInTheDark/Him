@@ -1,7 +1,7 @@
 package com.hitd.im.service.friendship.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.hitd.im.common.ResponseVO;
+import com.hitd.im.common.R;
 import com.hitd.im.common.enums.ApproverFriendRequestStatusEnum;
 import com.hitd.im.common.enums.FriendShipErrorCode;
 import com.hitd.im.common.exception.ApplicationException;
@@ -34,7 +34,7 @@ public class ImFriendShipRequestServiceImpl implements ImFriendShipRequestServic
     @Resource
     private ImFriendShipRequestMapper imFriendShipRequestMapper;
     @Override
-    public ResponseVO<?> addFriendshipRequest(String fromId, FriendDto dto, Integer appId) {
+    public R<?> addFriendshipRequest(String fromId, FriendDto dto, Integer appId) {
 
         QueryWrapper<ImFriendShipRequestEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("app_id",appId);
@@ -70,11 +70,11 @@ public class ImFriendShipRequestServiceImpl implements ImFriendShipRequestServic
             request.setReadStatus(0);
             imFriendShipRequestMapper.updateById(request);
         }
-        return ResponseVO.successResponse();
+        return R.successResponse();
     }
 
     @Override
-    public ResponseVO<List<ImFriendShipRequestEntity>> getFriendRequest(String fromId, Integer appId) {
+    public R<List<ImFriendShipRequestEntity>> getFriendRequest(String fromId, Integer appId) {
 
         QueryWrapper<ImFriendShipRequestEntity> query = new QueryWrapper();
         query.eq("app_id", appId);
@@ -82,11 +82,11 @@ public class ImFriendShipRequestServiceImpl implements ImFriendShipRequestServic
 
         List<ImFriendShipRequestEntity> requestList = imFriendShipRequestMapper.selectList(query);
 
-        return ResponseVO.successResponse(requestList);
+        return R.successResponse(requestList);
     }
     @Override
     @Transactional
-    public ResponseVO<?> approveFriendRequest(ApproverFriendRequestReq req) {
+    public R<?> approveFriendRequest(ApproverFriendRequestReq req) {
 
         ImFriendShipRequestEntity imFriendShipRequestEntity = imFriendShipRequestMapper.selectById(req.getId());
         if(imFriendShipRequestEntity == null){
@@ -111,20 +111,20 @@ public class ImFriendShipRequestServiceImpl implements ImFriendShipRequestServic
             dto.setAddWording(imFriendShipRequestEntity.getAddWording());
             dto.setRemark(imFriendShipRequestEntity.getRemark());
             dto.setToId(imFriendShipRequestEntity.getToId());
-            ResponseVO responseVO = imFriendShipService.doAddFriend(req,imFriendShipRequestEntity.getFromId(), dto,req.getAppId());
+            R r = imFriendShipService.doAddFriend(req,imFriendShipRequestEntity.getFromId(), dto,req.getAppId());
 //            if(!responseVO.isOk()){
 ////                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 //                return responseVO;
 //            }
-            if(!responseVO.isOk() && responseVO.getCode() != FriendShipErrorCode.TO_IS_YOUR_FRIEND.getCode()){
-                return responseVO;
+            if(!r.isOk() && r.getCode() != FriendShipErrorCode.TO_IS_YOUR_FRIEND.getCode()){
+                return r;
             }
         }
-        return ResponseVO.successResponse();
+        return R.successResponse();
     }
 
     @Override
-    public ResponseVO<?> readFriendShipRequestReq(ReadFriendShipRequestReq req) {
+    public R<?> readFriendShipRequestReq(ReadFriendShipRequestReq req) {
         QueryWrapper<ImFriendShipRequestEntity> query = new QueryWrapper<>();
         query.eq("app_id", req.getAppId());
         query.eq("to_id", req.getFromId());
@@ -132,6 +132,6 @@ public class ImFriendShipRequestServiceImpl implements ImFriendShipRequestServic
         ImFriendShipRequestEntity update = new ImFriendShipRequestEntity();
         update.setReadStatus(1);
         imFriendShipRequestMapper.update(update, query);
-        return ResponseVO.successResponse();
+        return R.successResponse();
     }
 }

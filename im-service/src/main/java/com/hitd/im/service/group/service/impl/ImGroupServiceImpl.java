@@ -3,7 +3,7 @@ package com.hitd.im.service.group.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.hitd.im.common.ResponseVO;
+import com.hitd.im.common.R;
 import com.hitd.im.common.enums.GroupErrorCode;
 import com.hitd.im.common.enums.GroupMemberRoleEnum;
 import com.hitd.im.common.enums.GroupStatusEnum;
@@ -44,7 +44,7 @@ public class ImGroupServiceImpl implements ImGroupService {
     private ImGroupMemberService groupMemberService;
 
     @Override
-    public  ResponseVO<?> importGroup(ImportGroupReq req) {
+    public R<?> importGroup(ImportGroupReq req) {
 
         //1.判断群id是否存在
         QueryWrapper<ImGroupEntity> query = new QueryWrapper<>();
@@ -77,12 +77,12 @@ public class ImGroupServiceImpl implements ImGroupService {
             throw new ApplicationException(GroupErrorCode.IMPORT_GROUP_ERROR);
         }
 
-        return ResponseVO.successResponse();
+        return R.successResponse();
     }
 
     @Override
     @Transactional
-    public  ResponseVO<?> createGroup(CreateGroupReq req) {
+    public R<?> createGroup(CreateGroupReq req) {
 
         boolean isAdmin = false;
 
@@ -124,13 +124,13 @@ public class ImGroupServiceImpl implements ImGroupService {
         for (GroupMemberDto dto : req.getMember()) {
             groupMemberService.addGroupMember(req.getGroupId(), req.getAppId(), dto);
         }
-        return ResponseVO.successResponse();
+        return R.successResponse();
     }
 
 
     @Override
     @Transactional
-    public  ResponseVO<?> updateBaseGroupInfo(UpdateGroupReq req) {
+    public R<?> updateBaseGroupInfo(UpdateGroupReq req) {
 
         //1.判断群id是否存在
         QueryWrapper<ImGroupEntity> query = new QueryWrapper<>();
@@ -149,7 +149,7 @@ public class ImGroupServiceImpl implements ImGroupService {
 
         if (!isAdmin) {
             //不是后台调用需要检查权限
-            ResponseVO<GetRoleInGroupResp> role = groupMemberService.getRoleInGroupOne(req.getGroupId(), req.getOperator(), req.getAppId());
+            R<GetRoleInGroupResp> role = groupMemberService.getRoleInGroupOne(req.getGroupId(), req.getOperator(), req.getAppId());
 
             if (!role.isOk()) {
                 return role;
@@ -175,14 +175,14 @@ public class ImGroupServiceImpl implements ImGroupService {
         if (row != 1) {
             throw new ApplicationException(GroupErrorCode.THIS_OPERATE_NEED_MANAGER_ROLE);
         }
-        return ResponseVO.successResponse();
+        return R.successResponse();
     }
 
 
     @Override
-    public  ResponseVO<?> getJoinedGroup(GetJoinedGroupReq req) {
+    public R<?> getJoinedGroup(GetJoinedGroupReq req) {
 
-        ResponseVO<Collection<String>> memberJoinedGroup = groupMemberService.getMemberJoinedGroup(req);
+        R<Collection<String>> memberJoinedGroup = groupMemberService.getMemberJoinedGroup(req);
         if (memberJoinedGroup.isOk()) {
 
             GetJoinedGroupResp resp = new GetJoinedGroupResp();
@@ -190,7 +190,7 @@ public class ImGroupServiceImpl implements ImGroupService {
             if (CollectionUtils.isEmpty(memberJoinedGroup.getData())) {
                 resp.setTotalCount(0);
                 resp.setGroupList(new ArrayList<>());
-                return ResponseVO.successResponse(resp);
+                return R.successResponse(resp);
             }
 
             QueryWrapper<ImGroupEntity> query = new QueryWrapper<>();
@@ -208,7 +208,7 @@ public class ImGroupServiceImpl implements ImGroupService {
             } else {
                 resp.setTotalCount(imGroupDataMapper.selectCount(query));
             }
-            return ResponseVO.successResponse(resp);
+            return R.successResponse(resp);
         } else {
             return memberJoinedGroup;
         }
@@ -218,7 +218,7 @@ public class ImGroupServiceImpl implements ImGroupService {
 
     @Override
     @Transactional
-    public  ResponseVO<?> destroyGroup(DestroyGroupReq req) {
+    public R<?> destroyGroup(DestroyGroupReq req) {
 
         boolean isAdmin = false;
 
@@ -252,23 +252,23 @@ public class ImGroupServiceImpl implements ImGroupService {
         if (update1 != 1) {
             throw new ApplicationException(GroupErrorCode.UPDATE_GROUP_BASE_INFO_ERROR);
         }
-        return ResponseVO.successResponse();
+        return R.successResponse();
     }
 
     @Override
     @Transactional
-    public  ResponseVO<?> transferGroup(TransferGroupReq req) {
+    public R<?> transferGroup(TransferGroupReq req) {
 
-        ResponseVO<GetRoleInGroupResp> roleInGroupOne = groupMemberService.getRoleInGroupOne(req.getGroupId(), req.getOperator(), req.getAppId());
+        R<GetRoleInGroupResp> roleInGroupOne = groupMemberService.getRoleInGroupOne(req.getGroupId(), req.getOperator(), req.getAppId());
         if (!roleInGroupOne.isOk()) {
             return roleInGroupOne;
         }
 
         if (roleInGroupOne.getData().getRole() != GroupMemberRoleEnum.OWNER.getCode()) {
-            return ResponseVO.errorResponse(GroupErrorCode.THIS_OPERATE_NEED_OWNER_ROLE);
+            return R.errorResponse(GroupErrorCode.THIS_OPERATE_NEED_OWNER_ROLE);
         }
 
-        ResponseVO<GetRoleInGroupResp> newOwnerRole = groupMemberService.getRoleInGroupOne(req.getGroupId(), req.getOwnerId(), req.getAppId());
+        R<GetRoleInGroupResp> newOwnerRole = groupMemberService.getRoleInGroupOne(req.getGroupId(), req.getOwnerId(), req.getAppId());
         if (!newOwnerRole.isOk()) {
             return newOwnerRole;
         }
@@ -289,11 +289,11 @@ public class ImGroupServiceImpl implements ImGroupService {
         imGroupDataMapper.update(updateGroup, updateGroupWrapper);
         groupMemberService.transferGroupMember(req.getOwnerId(), req.getGroupId(), req.getAppId());
 
-        return ResponseVO.successResponse();
+        return R.successResponse();
     }
 
     @Override
-    public  ResponseVO<ImGroupEntity> getGroup(String groupId, Integer appId) {
+    public R<ImGroupEntity> getGroup(String groupId, Integer appId) {
 
         QueryWrapper<ImGroupEntity> query = new QueryWrapper<>();
         query.eq("app_id", appId);
@@ -301,15 +301,15 @@ public class ImGroupServiceImpl implements ImGroupService {
         ImGroupEntity imGroupEntity = imGroupDataMapper.selectOne(query);
 
         if (imGroupEntity == null) {
-            return ResponseVO.errorResponse(GroupErrorCode.GROUP_IS_NOT_EXIST);
+            return R.errorResponse(GroupErrorCode.GROUP_IS_NOT_EXIST);
         }
-        return ResponseVO.successResponse(imGroupEntity);
+        return R.successResponse(imGroupEntity);
     }
 
     @Override
-    public  ResponseVO<?> getGroup(GetGroupReq req) {
+    public R<?> getGroup(GetGroupReq req) {
 
-        ResponseVO group = this.getGroup(req.getGroupId(), req.getAppId());
+        R group = this.getGroup(req.getGroupId(), req.getAppId());
 
         if(!group.isOk()){
             return group;
@@ -318,20 +318,20 @@ public class ImGroupServiceImpl implements ImGroupService {
         GetGroupResp getGroupResp = new GetGroupResp();
         BeanUtils.copyProperties(group.getData(), getGroupResp);
         try {
-            ResponseVO<List<GroupMemberDto>> groupMember = groupMemberService.getGroupMember(req.getGroupId(), req.getAppId());
+            R<List<GroupMemberDto>> groupMember = groupMemberService.getGroupMember(req.getGroupId(), req.getAppId());
             if (groupMember.isOk()) {
                 getGroupResp.setMemberList(groupMember.getData());
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return ResponseVO.successResponse(getGroupResp);
+        return R.successResponse(getGroupResp);
     }
 
     @Override
-    public  ResponseVO<?> muteGroup(MuteGroupReq req) {
+    public R<?> muteGroup(MuteGroupReq req) {
 
-        ResponseVO<ImGroupEntity> groupResp = getGroup(req.getGroupId(), req.getAppId());
+        R<ImGroupEntity> groupResp = getGroup(req.getGroupId(), req.getAppId());
         if (!groupResp.isOk()) {
             return groupResp;
         }
@@ -340,11 +340,11 @@ public class ImGroupServiceImpl implements ImGroupService {
             throw new ApplicationException(GroupErrorCode.GROUP_IS_DESTROY);
         }
 
-        boolean isadmin = false;
+        boolean isAdmin = false;
 
-        if (!isadmin) {
+        if (!isAdmin) {
             //不是后台调用需要检查权限
-            ResponseVO<GetRoleInGroupResp> role = groupMemberService.getRoleInGroupOne(req.getGroupId(), req.getOperator(), req.getAppId());
+            R<GetRoleInGroupResp> role = groupMemberService.getRoleInGroupOne(req.getGroupId(), req.getOperator(), req.getAppId());
 
             if (!role.isOk()) {
                 return role;
@@ -369,7 +369,7 @@ public class ImGroupServiceImpl implements ImGroupService {
         wrapper.eq("app_id",req.getAppId());
         imGroupDataMapper.update(update,wrapper);
 
-        return ResponseVO.successResponse();
+        return R.successResponse();
     }
 
 //    @Override
@@ -414,7 +414,7 @@ public class ImGroupServiceImpl implements ImGroupService {
     @Override
     public Long getUserGroupMaxSeq(String userId, Integer appId) {
 
-        ResponseVO<Collection<String>> memberJoinedGroup = groupMemberService.syncMemberJoinedGroup(userId, appId);
+        R<Collection<String>> memberJoinedGroup = groupMemberService.syncMemberJoinedGroup(userId, appId);
         if(!memberJoinedGroup.isOk()){
             throw new ApplicationException(500,"");
         }

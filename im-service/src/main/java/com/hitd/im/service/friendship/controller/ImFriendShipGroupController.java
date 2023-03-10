@@ -1,7 +1,7 @@
 package com.hitd.im.service.friendship.controller;
 
 
-import com.hitd.im.common.ResponseVO;
+import com.hitd.im.common.R;
 import com.hitd.im.service.friendship.model.req.AddFriendShipGroupMemberReq;
 import com.hitd.im.service.friendship.model.req.AddFriendShipGroupReq;
 import com.hitd.im.service.friendship.model.req.DeleteFriendShipGroupMemberReq;
@@ -36,7 +36,7 @@ public class ImFriendShipGroupController {
      * @description 添加分组
      */
     @RequestMapping("/add")
-    public ResponseVO<?> add(@RequestBody @Validated AddFriendShipGroupReq req, Integer appId)  {
+    public R<?> add(@RequestBody @Validated AddFriendShipGroupReq req, Integer appId)  {
         req.setAppId(appId);
         return imFriendShipGroupService.addGroup(req);
     }
@@ -47,7 +47,7 @@ public class ImFriendShipGroupController {
      * @description 删除分组
      */
     @RequestMapping("/del")
-    public ResponseVO<?> del(@RequestBody @Validated DeleteFriendShipGroupReq req, Integer appId)  {
+    public R<?> del(@RequestBody @Validated DeleteFriendShipGroupReq req, Integer appId)  {
         req.setAppId(appId);
         return imFriendShipGroupService.deleteGroup(req);
     }
@@ -58,7 +58,7 @@ public class ImFriendShipGroupController {
      * @description 向分组添加好友
      */
     @RequestMapping("/member/add")
-    public ResponseVO<?> memberAdd(@RequestBody @Validated AddFriendShipGroupMemberReq req, Integer appId)  {
+    public R<?> memberAdd(@RequestBody @Validated AddFriendShipGroupMemberReq req, Integer appId)  {
         req.setAppId(appId);
         return imFriendShipGroupMemberService.addGroupMember(req);
     }
@@ -69,7 +69,7 @@ public class ImFriendShipGroupController {
      * @description 从分组删除好友
      */
     @RequestMapping("/member/del")
-    public ResponseVO<?> memberDel(@RequestBody @Validated DeleteFriendShipGroupMemberReq req, Integer appId)  {
+    public R<?> memberDel(@RequestBody @Validated DeleteFriendShipGroupMemberReq req, Integer appId)  {
         req.setAppId(appId);
         return imFriendShipGroupMemberService.delGroupMember(req);
     }

@@ -1,9 +1,8 @@
 package com.hitd.im.service.user.service.impl;
 
 
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.hitd.im.common.ResponseVO;
+import com.hitd.im.common.R;
 import com.hitd.im.common.enums.DelFlagEnum;
 import com.hitd.im.common.enums.UserErrorCode;
 import com.hitd.im.common.exception.ApplicationException;
@@ -21,7 +20,6 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author ZhangWeinan
@@ -35,9 +33,9 @@ public class ImUserServiceImpl implements ImUserService {
     private ImUserDataMapper imUserDataMapper;
 
     @Override
-    public ResponseVO<ImportUserResp> importUser(ImportUserReq req) {
+    public R<ImportUserResp> importUser(ImportUserReq req) {
         if (req.getUserData().size() > 100){
-            return ResponseVO.errorResponse(UserErrorCode.IMPORT_SIZE_BEYOND);
+            return R.errorResponse(UserErrorCode.IMPORT_SIZE_BEYOND);
         }
         List<String> successIds = new ArrayList<>();
         List<String> errorIds = new ArrayList<>();
@@ -57,11 +55,11 @@ public class ImUserServiceImpl implements ImUserService {
         ImportUserResp importUserResp = new ImportUserResp();
         importUserResp.setErrorIds(errorIds);
         importUserResp.setSuccessIds(successIds);
-        return ResponseVO.successResponse(importUserResp);
+        return R.successResponse(importUserResp);
     }
 
     @Override
-    public ResponseVO<GetUserInfoResp> getUserInfo(GetUserInfoReq req) {
+    public R<GetUserInfoResp> getUserInfo(GetUserInfoReq req) {
         QueryWrapper<ImUserDataEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("app_id",req.getAppId());
         queryWrapper.in("user_id",req.getUserIds());
@@ -86,11 +84,11 @@ public class ImUserServiceImpl implements ImUserService {
         GetUserInfoResp resp = new GetUserInfoResp();
         resp.setUserDataItem(userDataEntities);
         resp.setFailUser(failUser);
-        return ResponseVO.successResponse(resp);
+        return R.successResponse(resp);
     }
 
     @Override
-    public ResponseVO<ImUserDataEntity> getSingleUserInfo(String userId, Integer appId) {
+    public R<ImUserDataEntity> getSingleUserInfo(String userId, Integer appId) {
         QueryWrapper<ImUserDataEntity> userDataEntityQueryWrapper = new QueryWrapper<>();
         userDataEntityQueryWrapper.eq("app_id",appId);
         userDataEntityQueryWrapper.eq("user_id",userId);
@@ -98,14 +96,14 @@ public class ImUserServiceImpl implements ImUserService {
 
         ImUserDataEntity ImUserDataEntity = imUserDataMapper.selectOne(userDataEntityQueryWrapper);
         if(ImUserDataEntity == null){
-            return ResponseVO.errorResponse(UserErrorCode.USER_IS_NOT_EXIST);
+            return R.errorResponse(UserErrorCode.USER_IS_NOT_EXIST);
         }
 
-        return ResponseVO.successResponse(ImUserDataEntity);
+        return R.successResponse(ImUserDataEntity);
     }
 
     @Override
-    public ResponseVO<?> deleteUser(DeleteUserReq req) {
+    public R<?> deleteUser(DeleteUserReq req) {
         ImUserDataEntity entity = new ImUserDataEntity();
         entity.setDelFlag(DelFlagEnum.DELETE.getCode());
 
@@ -133,12 +131,12 @@ public class ImUserServiceImpl implements ImUserService {
         ImportUserResp resp = new ImportUserResp();
         resp.setSuccessIds(successId);
         resp.setErrorIds(errorId);
-        return ResponseVO.successResponse(resp);
+        return R.successResponse(resp);
     }
 
     @Override
     @Transactional
-    public ResponseVO<?> modifyUserInfo(ModifyUserInfoReq req) {
+    public R<?> modifyUserInfo(ModifyUserInfoReq req) {
         QueryWrapper<ImUserDataEntity> query = new QueryWrapper<>();
         query.eq("app_id",req.getAppId());
         query.eq("user_id",req.getUserId());
@@ -171,12 +169,12 @@ public class ImUserServiceImpl implements ImUserService {
     }
 
     @Override
-    public ResponseVO<?> login(LoginReq req) {
-        return ResponseVO.successResponse();
+    public R<?> login(LoginReq req) {
+        return R.successResponse();
     }
 
     @Override
-    public ResponseVO<?> getUserSequence(GetUserSequenceReq req) {
+    public R<?> getUserSequence(GetUserSequenceReq req) {
 //        Map<Object, Object> map = stringRedisTemplate.opsForHash().entries(req.getAppId() + ":" + Constants.RedisConstants.SeqPrefix + ":" + req.getUserId());
 //        Long groupSeq = imGroupService.getUserGroupMaxSeq(req.getUserId(),req.getAppId());
 //        map.put(Constants.SeqConstants.Group,groupSeq);

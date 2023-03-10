@@ -1,6 +1,6 @@
 package com.hitd.im.service.group.controller;
 
-import com.hitd.im.common.ResponseVO;
+import com.hitd.im.common.R;
 import com.hitd.im.service.group.model.req.*;
 import com.hitd.im.service.group.model.resp.AddMemberResp;
 import com.hitd.im.service.group.service.ImGroupMemberService;
@@ -30,7 +30,7 @@ public class ImGroupMemberController {
      * @description 导入群成员
      */
     @RequestMapping("/importGroupMember")
-    public ResponseVO<List<AddMemberResp>>importGroupMember(@RequestBody @Validated ImportGroupMemberReq req, Integer appId, String identifier)  {
+    public R<List<AddMemberResp>> importGroupMember(@RequestBody @Validated ImportGroupMemberReq req, Integer appId, String identifier)  {
         req.setAppId(appId);
         req.setOperator(identifier);
         return groupMemberService.importGroupMember(req);
@@ -42,7 +42,7 @@ public class ImGroupMemberController {
      * @description 添加群成员
      */
     @RequestMapping("/add")
-    public ResponseVO<?> addMember(@RequestBody @Validated AddGroupMemberReq req, Integer appId, String identifier)  {
+    public R<?> addMember(@RequestBody @Validated AddGroupMemberReq req, Integer appId, String identifier)  {
         req.setAppId(appId);
         req.setOperator(identifier);
         return groupMemberService.addMember(req);
@@ -54,7 +54,7 @@ public class ImGroupMemberController {
      * @description 移除群成员
      */
     @RequestMapping("/remove")
-    public ResponseVO<?> removeMember(@RequestBody @Validated RemoveGroupMemberReq req, Integer appId, String identifier)  {
+    public R<?> removeMember(@RequestBody @Validated RemoveGroupMemberReq req, Integer appId, String identifier)  {
         req.setAppId(appId);
         req.setOperator(identifier);
         return groupMemberService.removeMember(req);
@@ -66,7 +66,7 @@ public class ImGroupMemberController {
      * @description 修改群成员信息
      */
     @RequestMapping("/update")
-    public ResponseVO<?> updateGroupMember(@RequestBody @Validated UpdateGroupMemberReq req, Integer appId, String identifier)  {
+    public R<?> updateGroupMember(@RequestBody @Validated UpdateGroupMemberReq req, Integer appId, String identifier)  {
         req.setAppId(appId);
         req.setOperator(identifier);
         return groupMemberService.updateGroupMember(req);
@@ -78,7 +78,7 @@ public class ImGroupMemberController {
      * @description 禁言群成员
      */
     @RequestMapping("/speak")
-    public ResponseVO<?> speak(@RequestBody @Validated SpeaMemberReq req, Integer appId, String identifier)  {
+    public R<?> speak(@RequestBody @Validated SpeaMemberReq req, Integer appId, String identifier)  {
         req.setAppId(appId);
         req.setOperator(identifier);
         return groupMemberService.speak(req);

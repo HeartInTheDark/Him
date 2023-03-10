@@ -2,7 +2,7 @@ package com.hitd.im.service.friendship.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.hitd.im.common.ResponseVO;
+import com.hitd.im.common.R;
 import com.hitd.im.common.enums.DelFlagEnum;
 import com.hitd.im.common.enums.FriendShipErrorCode;
 import com.hitd.im.service.friendship.dao.ImFriendShipGroupEntity;
@@ -33,7 +33,7 @@ public class ImFriendShipGroupServiceImpl implements ImFriendShipGroupService {
 
     @Override
     @Transactional
-    public ResponseVO<?> addGroup(AddFriendShipGroupReq req) {
+    public R<?> addGroup(AddFriendShipGroupReq req) {
 
         QueryWrapper<ImFriendShipGroupEntity> query = new QueryWrapper<>();
         query.eq("group_name", req.getGroupName());
@@ -44,7 +44,7 @@ public class ImFriendShipGroupServiceImpl implements ImFriendShipGroupService {
         ImFriendShipGroupEntity entity = imFriendShipGroupMapper.selectOne(query);
 
         if (entity != null) {
-            return ResponseVO.errorResponse(FriendShipErrorCode.FRIEND_SHIP_GROUP_IS_EXIST);
+            return R.errorResponse(FriendShipErrorCode.FRIEND_SHIP_GROUP_IS_EXIST);
         }
 
         //写入db
@@ -58,7 +58,7 @@ public class ImFriendShipGroupServiceImpl implements ImFriendShipGroupService {
             int insert1 = imFriendShipGroupMapper.insert(insert);
 
             if (insert1 != 1) {
-                return ResponseVO.errorResponse(FriendShipErrorCode.FRIEND_SHIP_GROUP_CREATE_ERROR);
+                return R.errorResponse(FriendShipErrorCode.FRIEND_SHIP_GROUP_CREATE_ERROR);
             }
             if (CollectionUtil.isNotEmpty(req.getToIds())) {
                 AddFriendShipGroupMemberReq addFriendShipGroupMemberReq = new AddFriendShipGroupMemberReq();
@@ -67,18 +67,18 @@ public class ImFriendShipGroupServiceImpl implements ImFriendShipGroupService {
                 addFriendShipGroupMemberReq.setToIds(req.getToIds());
                 addFriendShipGroupMemberReq.setAppId(req.getAppId());
                 imFriendShipGroupMemberService.addGroupMember(addFriendShipGroupMemberReq);
-                return ResponseVO.successResponse();
+                return R.successResponse();
             }
         } catch (DuplicateKeyException e) {
             e.getStackTrace();
-            return ResponseVO.errorResponse(FriendShipErrorCode.FRIEND_SHIP_GROUP_IS_EXIST);
+            return R.errorResponse(FriendShipErrorCode.FRIEND_SHIP_GROUP_IS_EXIST);
         }
-        return ResponseVO.successResponse();
+        return R.successResponse();
     }
 
     @Override
     @Transactional
-    public ResponseVO<?> deleteGroup(DeleteFriendShipGroupReq req) {
+    public R<?> deleteGroup(DeleteFriendShipGroupReq req) {
 
         for (String groupName : req.getGroupName()) {
             QueryWrapper<ImFriendShipGroupEntity> query = new QueryWrapper<>();
@@ -97,11 +97,11 @@ public class ImFriendShipGroupServiceImpl implements ImFriendShipGroupService {
                 imFriendShipGroupMemberService.clearGroupMember(entity.getGroupId());
             }
         }
-        return ResponseVO.successResponse();
+        return R.successResponse();
     }
 
     @Override
-    public ResponseVO<ImFriendShipGroupEntity> getGroup(String fromId, String groupName, Integer appId) {
+    public R<ImFriendShipGroupEntity> getGroup(String fromId, String groupName, Integer appId) {
         QueryWrapper<ImFriendShipGroupEntity> query = new QueryWrapper<>();
         query.eq("group_name", groupName);
         query.eq("app_id", appId);
@@ -110,9 +110,9 @@ public class ImFriendShipGroupServiceImpl implements ImFriendShipGroupService {
 
         ImFriendShipGroupEntity entity = imFriendShipGroupMapper.selectOne(query);
         if (entity == null) {
-            return ResponseVO.errorResponse(FriendShipErrorCode.FRIEND_SHIP_GROUP_IS_NOT_EXIST);
+            return R.errorResponse(FriendShipErrorCode.FRIEND_SHIP_GROUP_IS_NOT_EXIST);
         }
-        return ResponseVO.successResponse(entity);
+        return R.successResponse(entity);
     }
 
     @Override

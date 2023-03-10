@@ -1,7 +1,7 @@
 package com.hitd.im.service.group.service;
 
 
-import com.hitd.im.common.ResponseVO;
+import com.hitd.im.common.R;
 import com.hitd.im.service.group.dao.ImGroupEntity;
 import com.hitd.im.service.group.model.req.*;
 
@@ -12,23 +12,23 @@ import com.hitd.im.service.group.model.req.*;
  */
 public interface ImGroupService {
 
-    ResponseVO<?> importGroup(ImportGroupReq req);
+    R<?> importGroup(ImportGroupReq req);
 
-    ResponseVO<?> createGroup(CreateGroupReq req);
+    R<?> createGroup(CreateGroupReq req);
 
-    ResponseVO<?> updateBaseGroupInfo(UpdateGroupReq req);
+    R<?> updateBaseGroupInfo(UpdateGroupReq req);
 
-    ResponseVO<?> getJoinedGroup(GetJoinedGroupReq req);
+    R<?> getJoinedGroup(GetJoinedGroupReq req);
 
-    ResponseVO<?> destroyGroup(DestroyGroupReq req);
+    R<?> destroyGroup(DestroyGroupReq req);
 
-    ResponseVO<?> transferGroup(TransferGroupReq req);
+    R<?> transferGroup(TransferGroupReq req);
 
-    ResponseVO<ImGroupEntity> getGroup(String groupId, Integer appId);
+    R<ImGroupEntity> getGroup(String groupId, Integer appId);
 
-    ResponseVO<?> getGroup(GetGroupReq req);
+    R<?> getGroup(GetGroupReq req);
 
-    ResponseVO<?> muteGroup(MuteGroupReq req);
+    R<?> muteGroup(MuteGroupReq req);
 
 //    ResponseVO<?> syncJoinedGroupList(SyncReq req);
 

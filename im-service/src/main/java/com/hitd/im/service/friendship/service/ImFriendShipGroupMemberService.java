@@ -1,7 +1,7 @@
 package com.hitd.im.service.friendship.service;
 
 
-import com.hitd.im.common.ResponseVO;
+import com.hitd.im.common.R;
 import com.hitd.im.service.friendship.model.req.AddFriendShipGroupMemberReq;
 import com.hitd.im.service.friendship.model.req.DeleteFriendShipGroupMemberReq;
 
@@ -11,9 +11,9 @@ import com.hitd.im.service.friendship.model.req.DeleteFriendShipGroupMemberReq;
  **/
 public interface ImFriendShipGroupMemberService {
 
-   ResponseVO<?> addGroupMember(AddFriendShipGroupMemberReq req);
+   R<?> addGroupMember(AddFriendShipGroupMemberReq req);
 
-   ResponseVO<?> delGroupMember(DeleteFriendShipGroupMemberReq req);
+   R<?> delGroupMember(DeleteFriendShipGroupMemberReq req);
 
    int doAddGroupMember(Long groupId, String toId);
 

@@ -1,7 +1,7 @@
 package com.hitd.im.service.friendship.controller;
 
 
-import com.hitd.im.common.ResponseVO;
+import com.hitd.im.common.R;
 import com.hitd.im.service.friendship.dao.ImFriendShipRequestEntity;
 import com.hitd.im.service.friendship.model.req.ApproverFriendRequestReq;
 import com.hitd.im.service.friendship.model.req.GetFriendShipRequestReq;
@@ -33,7 +33,7 @@ public class ImFriendShipRequestController {
      * @description 好友申请审核
      */
     @RequestMapping("/approveFriendRequest")
-    public ResponseVO<?> approveFriendRequest(@RequestBody @Validated
+    public R<?> approveFriendRequest(@RequestBody @Validated
                                            ApproverFriendRequestReq req, Integer appId, String identifier){
         req.setAppId(appId);
         req.setOperator(identifier);
@@ -46,7 +46,7 @@ public class ImFriendShipRequestController {
      * @description 获取好友申请记录
      */
     @RequestMapping("/getFriendRequest")
-    public ResponseVO<List<ImFriendShipRequestEntity>> getFriendRequest(@RequestBody @Validated GetFriendShipRequestReq req, Integer appId){
+    public R<List<ImFriendShipRequestEntity>> getFriendRequest(@RequestBody @Validated GetFriendShipRequestReq req, Integer appId){
         req.setAppId(appId);
         return imFriendShipRequestService.getFriendRequest(req.getFromId(),req.getAppId());
     }
@@ -57,7 +57,7 @@ public class ImFriendShipRequestController {
      * @description 查看好友申请
      */
     @RequestMapping("/readFriendShipRequestReq")
-    public ResponseVO<?> readFriendShipRequestReq(@RequestBody @Validated ReadFriendShipRequestReq req, Integer appId){
+    public R<?> readFriendShipRequestReq(@RequestBody @Validated ReadFriendShipRequestReq req, Integer appId){
         req.setAppId(appId);
         return imFriendShipRequestService.readFriendShipRequestReq(req);
     }

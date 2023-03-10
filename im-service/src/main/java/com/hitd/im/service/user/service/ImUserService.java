@@ -1,7 +1,7 @@
 package com.hitd.im.service.user.service;
 
 
-import com.hitd.im.common.ResponseVO;
+import com.hitd.im.common.R;
 import com.hitd.im.service.user.dao.ImUserDataEntity;
 import com.hitd.im.service.user.model.req.*;
 import com.hitd.im.service.user.model.resp.GetUserInfoResp;
@@ -14,17 +14,17 @@ import com.hitd.im.service.user.model.resp.ImportUserResp;
  */
 public interface ImUserService {
 
-    ResponseVO<ImportUserResp> importUser(ImportUserReq req);
+    R<ImportUserResp> importUser(ImportUserReq req);
 
-    ResponseVO<GetUserInfoResp> getUserInfo(GetUserInfoReq req);
+    R<GetUserInfoResp> getUserInfo(GetUserInfoReq req);
 
-    ResponseVO<ImUserDataEntity> getSingleUserInfo(String userId , Integer appId);
+    R<ImUserDataEntity> getSingleUserInfo(String userId , Integer appId);
 
-    ResponseVO<?> deleteUser(DeleteUserReq req);
+    R<?> deleteUser(DeleteUserReq req);
 
-    ResponseVO<?> modifyUserInfo(ModifyUserInfoReq req);
+    R<?> modifyUserInfo(ModifyUserInfoReq req);
 
-    ResponseVO<?> login(LoginReq req);
+    R<?> login(LoginReq req);
 
-    ResponseVO<?> getUserSequence(GetUserSequenceReq req);
+    R<?> getUserSequence(GetUserSequenceReq req);
 }

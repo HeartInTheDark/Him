@@ -2,7 +2,7 @@ package com.hitd.im.service.friendship.service;
 
 
 
-import com.hitd.im.common.ResponseVO;
+import com.hitd.im.common.R;
 import com.hitd.im.common.model.RequestBase;
 import com.hitd.im.service.friendship.dao.ImFriendShipEntity;
 import com.hitd.im.service.friendship.model.req.*;
@@ -19,27 +19,27 @@ import java.util.List;
  */
 public interface ImFriendService {
 
-    ResponseVO<ImportFriendShipResp> importFriendShip(ImportFriendShipReq req);
+    R<ImportFriendShipResp> importFriendShip(ImportFriendShipReq req);
 
-    ResponseVO<?> addFriend(AddFriendReq req);
+    R<?> addFriend(AddFriendReq req);
 
-    ResponseVO<?> doAddFriend(RequestBase requestBase, String fromId, FriendDto dto, Integer appId);
+    R<?> doAddFriend(RequestBase requestBase, String fromId, FriendDto dto, Integer appId);
 
-    ResponseVO<?> updateFriend(UpdateFriendReq req);
+    R<?> updateFriend(UpdateFriendReq req);
 
-    ResponseVO<?> deleteFriend(DeleteFriendReq req);
+    R<?> deleteFriend(DeleteFriendReq req);
 
-    ResponseVO<?> deleteAllFriend(DeleteFriendReq req);
+    R<?> deleteAllFriend(DeleteFriendReq req);
 
-    ResponseVO<List<ImFriendShipEntity>> getAllFriendShip(GetAllFriendShipReq req);
+    R<List<ImFriendShipEntity>> getAllFriendShip(GetAllFriendShipReq req);
 
-    ResponseVO<ImFriendShipEntity> getRelation(GetRelationReq req);
+    R<ImFriendShipEntity> getRelation(GetRelationReq req);
 
-    ResponseVO<List<CheckFriendShipResp>> checkFriendship(CheckFriendShipReq req);
+    R<List<CheckFriendShipResp>> checkFriendship(CheckFriendShipReq req);
 
-    ResponseVO<?> addBlack(AddFriendShipBlackReq req);
+    R<?> addBlack(AddFriendShipBlackReq req);
 
-    ResponseVO<?> deleteBlack(DeleteBlackReq req);
+    R<?> deleteBlack(DeleteBlackReq req);
 
-    ResponseVO<?> checkBlack(CheckFriendShipReq req);
+    R<?> checkBlack(CheckFriendShipReq req);
 }

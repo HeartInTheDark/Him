@@ -1,7 +1,7 @@
 package com.hitd.im.service.friendship.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.hitd.im.common.ResponseVO;
+import com.hitd.im.common.R;
 import com.hitd.im.service.friendship.dao.ImFriendShipGroupEntity;
 import com.hitd.im.service.friendship.dao.ImFriendShipGroupMemberEntity;
 import com.hitd.im.service.friendship.dao.mapper.ImFriendShipGroupMemberMapper;
@@ -40,9 +40,9 @@ public class ImFriendShipGroupMemberServiceImpl implements ImFriendShipGroupMemb
 
     @Override
     @Transactional
-    public ResponseVO<?> addGroupMember(AddFriendShipGroupMemberReq req) {
+    public R<?> addGroupMember(AddFriendShipGroupMemberReq req) {
 
-        ResponseVO<ImFriendShipGroupEntity> group = imFriendShipGroupService
+        R<ImFriendShipGroupEntity> group = imFriendShipGroupService
                 .getGroup(req.getFromId(),req.getGroupName(),req.getAppId());
         if(!group.isOk()){
             return group;
@@ -50,7 +50,7 @@ public class ImFriendShipGroupMemberServiceImpl implements ImFriendShipGroupMemb
 
         List<String> successId = new ArrayList<>();
         for (String toId : req.getToIds()) {
-            ResponseVO<ImUserDataEntity> singleUserInfo = imUserService.getSingleUserInfo(toId, req.getAppId());
+            R<ImUserDataEntity> singleUserInfo = imUserService.getSingleUserInfo(toId, req.getAppId());
             if(singleUserInfo.isOk()){
                 int i = thisService.doAddGroupMember(group.getData().getGroupId(), toId);
                 if(i == 1){
@@ -58,12 +58,12 @@ public class ImFriendShipGroupMemberServiceImpl implements ImFriendShipGroupMemb
                 }
             }
         }
-        return ResponseVO.successResponse(successId);
+        return R.successResponse(successId);
     }
 
     @Override
-    public ResponseVO<?> delGroupMember(DeleteFriendShipGroupMemberReq req) {
-        ResponseVO<ImFriendShipGroupEntity> group = imFriendShipGroupService
+    public R<?> delGroupMember(DeleteFriendShipGroupMemberReq req) {
+        R<ImFriendShipGroupEntity> group = imFriendShipGroupService
                 .getGroup(req.getFromId(),req.getGroupName(),req.getAppId());
         if(!group.isOk()){
             return group;
@@ -71,7 +71,7 @@ public class ImFriendShipGroupMemberServiceImpl implements ImFriendShipGroupMemb
 
         List<String> successId = new ArrayList<>();
         for (String toId : req.getToIds()) {
-            ResponseVO<ImUserDataEntity> singleUserInfo = imUserService.getSingleUserInfo(toId, req.getAppId());
+            R<ImUserDataEntity> singleUserInfo = imUserService.getSingleUserInfo(toId, req.getAppId());
             if(singleUserInfo.isOk()){
                 int i = deleteGroupMember(group.getData().getGroupId(), toId);
                 if(i == 1){
@@ -81,7 +81,7 @@ public class ImFriendShipGroupMemberServiceImpl implements ImFriendShipGroupMemb
         }
 
         Long seq = imFriendShipGroupService.updateSeq(req.getFromId(), req.getGroupName(), req.getAppId());
-        return ResponseVO.successResponse(successId);
+        return R.successResponse(successId);
     }
 
     @Override

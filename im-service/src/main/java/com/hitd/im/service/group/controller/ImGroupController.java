@@ -1,7 +1,7 @@
 package com.hitd.im.service.group.controller;
 
 
-import com.hitd.im.common.ResponseVO;
+import com.hitd.im.common.R;
 import com.hitd.im.service.group.model.req.*;
 import com.hitd.im.service.group.service.ImGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class ImGroupController {
      * @description 导入群组
      */
     @RequestMapping("/importGroup")
-    public ResponseVO<?> importGroup(@RequestBody @Validated ImportGroupReq req, Integer appId, String identifier)  {
+    public R<?> importGroup(@RequestBody @Validated ImportGroupReq req, Integer appId, String identifier)  {
         req.setAppId(appId);
         req.setOperator(identifier);
         return groupService.importGroup(req);
@@ -41,7 +41,7 @@ public class ImGroupController {
      * @description 创建群组
      */
     @RequestMapping("/createGroup")
-    public ResponseVO<?> createGroup(@RequestBody @Validated CreateGroupReq req, Integer appId, String identifier)  {
+    public R<?> createGroup(@RequestBody @Validated CreateGroupReq req, Integer appId, String identifier)  {
         req.setAppId(appId);
         req.setOperator(identifier);
         return groupService.createGroup(req);
@@ -53,7 +53,7 @@ public class ImGroupController {
      * @description 获取群组信息
      */
     @RequestMapping("/getGroupInfo")
-    public ResponseVO<?> getGroupInfo(@RequestBody @Validated GetGroupReq req, Integer appId)  {
+    public R<?> getGroupInfo(@RequestBody @Validated GetGroupReq req, Integer appId)  {
         req.setAppId(appId);
         return groupService.getGroup(req);
     }
@@ -64,7 +64,7 @@ public class ImGroupController {
      * @description 修改群组信息
      */
     @RequestMapping("/update")
-    public ResponseVO<?> update(@RequestBody @Validated UpdateGroupReq req, Integer appId, String identifier)  {
+    public R<?> update(@RequestBody @Validated UpdateGroupReq req, Integer appId, String identifier)  {
         req.setAppId(appId);
         req.setOperator(identifier);
         return groupService.updateBaseGroupInfo(req);
@@ -76,7 +76,7 @@ public class ImGroupController {
      * @description 获取加入的群组
      */
     @RequestMapping("/getJoinedGroup")
-    public ResponseVO<?> getJoinedGroup(@RequestBody @Validated GetJoinedGroupReq req, Integer appId, String identifier)  {
+    public R<?> getJoinedGroup(@RequestBody @Validated GetJoinedGroupReq req, Integer appId, String identifier)  {
         req.setAppId(appId);
         req.setOperator(identifier);
         return groupService.getJoinedGroup(req);
@@ -89,7 +89,7 @@ public class ImGroupController {
      * @description 解散群组
      */
     @RequestMapping("/destroyGroup")
-    public ResponseVO<?> destroyGroup(@RequestBody @Validated DestroyGroupReq req, Integer appId, String identifier)  {
+    public R<?> destroyGroup(@RequestBody @Validated DestroyGroupReq req, Integer appId, String identifier)  {
         req.setAppId(appId);
         req.setOperator(identifier);
         return groupService.destroyGroup(req);
@@ -101,7 +101,7 @@ public class ImGroupController {
      * @description 转让群组
      */
     @RequestMapping("/transferGroup")
-    public ResponseVO<?> transferGroup(@RequestBody @Validated TransferGroupReq req, Integer appId, String identifier)  {
+    public R<?> transferGroup(@RequestBody @Validated TransferGroupReq req, Integer appId, String identifier)  {
         req.setAppId(appId);
         req.setOperator(identifier);
         return groupService.transferGroup(req);
@@ -113,7 +113,7 @@ public class ImGroupController {
      * @description 禁言群
      */
     @RequestMapping("/forbidSendMessage")
-    public ResponseVO<?> forbidSendMessage(@RequestBody @Validated MuteGroupReq req, Integer appId, String identifier)  {
+    public R<?> forbidSendMessage(@RequestBody @Validated MuteGroupReq req, Integer appId, String identifier)  {
         req.setAppId(appId);
         req.setOperator(identifier);
         return groupService.muteGroup(req);

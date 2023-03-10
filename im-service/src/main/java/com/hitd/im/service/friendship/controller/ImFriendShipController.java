@@ -1,7 +1,7 @@
 package com.hitd.im.service.friendship.controller;
 
 
-import com.hitd.im.common.ResponseVO;
+import com.hitd.im.common.R;
 import com.hitd.im.service.friendship.dao.ImFriendShipEntity;
 import com.hitd.im.service.friendship.model.req.*;
 import com.hitd.im.service.friendship.model.resp.CheckFriendShipResp;
@@ -33,7 +33,7 @@ public class ImFriendShipController {
      * @description 导入好友关系
      */
     @RequestMapping("/importFriendShip")
-    public ResponseVO<ImportFriendShipResp> importFriendShip(@RequestBody @Validated ImportFriendShipReq req, Integer appId){
+    public R<ImportFriendShipResp> importFriendShip(@RequestBody @Validated ImportFriendShipReq req, Integer appId){
         req.setAppId(appId);
         return imFriendShipService.importFriendShip(req);
     }
@@ -44,7 +44,7 @@ public class ImFriendShipController {
      * @description 添加好友
      */
     @RequestMapping("/addFriend")
-    public ResponseVO<?> addFriend(@RequestBody @Validated AddFriendReq req, Integer appId){
+    public R<?> addFriend(@RequestBody @Validated AddFriendReq req, Integer appId){
         req.setAppId(appId);
         return imFriendShipService.addFriend(req);
     }
@@ -55,7 +55,7 @@ public class ImFriendShipController {
      * @description 修改好友关系
      */
     @RequestMapping("/updateFriend")
-    public ResponseVO<?> updateFriend(@RequestBody @Validated UpdateFriendReq req, Integer appId){
+    public R<?> updateFriend(@RequestBody @Validated UpdateFriendReq req, Integer appId){
         req.setAppId(appId);
         return imFriendShipService.updateFriend(req);
     }
@@ -66,7 +66,7 @@ public class ImFriendShipController {
      * @description 修改好友
      */
     @RequestMapping("/deleteFriend")
-    public ResponseVO<?> deleteFriend(@RequestBody @Validated DeleteFriendReq req, Integer appId){
+    public R<?> deleteFriend(@RequestBody @Validated DeleteFriendReq req, Integer appId){
         req.setAppId(appId);
         return imFriendShipService.deleteFriend(req);
     }
@@ -77,7 +77,7 @@ public class ImFriendShipController {
      * @description 删除所有好友
      */
     @RequestMapping("/deleteAllFriend")
-    public ResponseVO<?> deleteAllFriend(@RequestBody @Validated DeleteFriendReq req, Integer appId){
+    public R<?> deleteAllFriend(@RequestBody @Validated DeleteFriendReq req, Integer appId){
         req.setAppId(appId);
         return imFriendShipService.deleteAllFriend(req);
     }
@@ -88,7 +88,7 @@ public class ImFriendShipController {
      * @description 获取所有好友
      */
     @RequestMapping("/getAllFriendShip")
-    public ResponseVO<List<ImFriendShipEntity>> getAllFriendShip(@RequestBody @Validated GetAllFriendShipReq req, Integer appId){
+    public R<List<ImFriendShipEntity>> getAllFriendShip(@RequestBody @Validated GetAllFriendShipReq req, Integer appId){
         req.setAppId(appId);
         return imFriendShipService.getAllFriendShip(req);
     }
@@ -99,7 +99,7 @@ public class ImFriendShipController {
      * @description 获取好友链
      */
     @RequestMapping("/getRelation")
-    public ResponseVO<ImFriendShipEntity> getRelation(@RequestBody @Validated GetRelationReq req, Integer appId){
+    public R<ImFriendShipEntity> getRelation(@RequestBody @Validated GetRelationReq req, Integer appId){
         req.setAppId(appId);
         return imFriendShipService.getRelation(req);
     }
@@ -110,7 +110,7 @@ public class ImFriendShipController {
      * @description 检查好友 【1单向检查、2双向检查】
      */
     @RequestMapping("/checkFriend")
-    public ResponseVO<List<CheckFriendShipResp>> checkFriend(@RequestBody @Validated CheckFriendShipReq req, Integer appId){
+    public R<List<CheckFriendShipResp>> checkFriend(@RequestBody @Validated CheckFriendShipReq req, Integer appId){
         req.setAppId(appId);
         return imFriendShipService.checkFriendship(req);
     }
@@ -121,7 +121,7 @@ public class ImFriendShipController {
      * @description 加入黑名单
      */
     @RequestMapping("/addBlack")
-    public ResponseVO<?> addBlack(@RequestBody @Validated AddFriendShipBlackReq req, Integer appId){
+    public R<?> addBlack(@RequestBody @Validated AddFriendShipBlackReq req, Integer appId){
         req.setAppId(appId);
         return imFriendShipService.addBlack(req);
     }
@@ -132,7 +132,7 @@ public class ImFriendShipController {
      * @description 移出黑名单
      */
     @RequestMapping("/deleteBlack")
-    public ResponseVO<?> deleteBlack(@RequestBody @Validated DeleteBlackReq req, Integer appId){
+    public R<?> deleteBlack(@RequestBody @Validated DeleteBlackReq req, Integer appId){
         req.setAppId(appId);
         return imFriendShipService.deleteBlack(req);
     }
@@ -143,7 +143,7 @@ public class ImFriendShipController {
      * @description 检查是否在黑名单
      */
     @RequestMapping("/checkBlack")
-    public ResponseVO<?> checkBlack(@RequestBody @Validated CheckFriendShipReq req, Integer appId){
+    public R<?> checkBlack(@RequestBody @Validated CheckFriendShipReq req, Integer appId){
         req.setAppId(appId);
         return imFriendShipService.checkBlack(req);
     }

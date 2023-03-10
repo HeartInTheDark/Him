@@ -1,16 +1,13 @@
 package com.hitd.im.service.user.controller;
 
-import com.hitd.im.common.ResponseVO;
+import com.hitd.im.common.R;
 import com.hitd.im.service.user.dao.ImUserDataEntity;
 import com.hitd.im.service.user.model.req.GetUserInfoReq;
-import com.hitd.im.service.user.model.req.ImportUserReq;
 import com.hitd.im.service.user.model.req.ModifyUserInfoReq;
 import com.hitd.im.service.user.model.req.UserId;
 import com.hitd.im.service.user.model.resp.GetUserInfoResp;
-import com.hitd.im.service.user.model.resp.ImportUserResp;
 import com.hitd.im.service.user.service.ImUserService;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,7 +34,7 @@ public class ImUserDataController {
      * @description 获取【多个】用户信息
      */
     @RequestMapping("/getUserInfo")
-    public ResponseVO<GetUserInfoResp> getUserInfo(@RequestBody GetUserInfoReq req, Integer appId){//@Validated
+    public R<GetUserInfoResp> getUserInfo(@RequestBody GetUserInfoReq req, Integer appId){//@Validated
         req.setAppId(appId);
         return imUserService.getUserInfo(req);
     }
@@ -48,7 +45,7 @@ public class ImUserDataController {
      * @description 获取一个用户信息
      */
     @RequestMapping("/getSingleUserInfo")
-    public ResponseVO<ImUserDataEntity> getSingleUserInfo(@RequestBody @Validated UserId req, Integer appId){
+    public R<ImUserDataEntity> getSingleUserInfo(@RequestBody @Validated UserId req, Integer appId){
         req.setAppId(appId);
         return imUserService.getSingleUserInfo(req.getUserId(),req.getAppId());
     }
@@ -59,7 +56,7 @@ public class ImUserDataController {
      * @description 修改用户信息
      */
     @RequestMapping("/modifyUserInfo")
-    public ResponseVO<?> modifyUserInfo(@RequestBody @Validated ModifyUserInfoReq req, Integer appId){
+    public R<?> modifyUserInfo(@RequestBody @Validated ModifyUserInfoReq req, Integer appId){
         req.setAppId(appId);
         return imUserService.modifyUserInfo(req);
     }
